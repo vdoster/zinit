@@ -1,12 +1,14 @@
 #!/usr/bin/env zsh
-setopt NO_GLOBAL_RCS NO_GLOBAL_EXPORT NO_RCS
 
+emulate -L zsh
+setopt EXTENDED_GLOB NO_GLOBAL_RCS NO_GLOBAL_EXPORT NO_RCS
 # Log functions [[[
 function error(){ print -P "%F{red}[ERROR]%f: ${1}" && return 1; }
 function info() { print -P "%F{green}[INFO]%f:%F{cyan} ${1} %f"; }
 function warn() { print -P "%F{yellow}[WARN]%f: ${1}"; }
 # ]]]
 # Create Zunit test environment [[[
+info "OSTYPE=${OSTYPE} MACHTYPE=${MACHTYPE} CPUTYPE=${CPUTYPE} cpu=$(uname -m) processor=$(uname -p) os=$(uname -s)"
 GIT_REPO=$(git rev-parse --show-toplevel)
 
 _mktemp_cmd='mktemp'
@@ -26,6 +28,7 @@ ZINIT[COMPLETIONS_DIR]=$ZINIT[HOME_DIR]/completions;
 ZINIT[PLUGINS_DIR]=$ZINIT[HOME_DIR]/plugins;
 ZINIT[SNIPPETS_DIR]=$ZINIT[HOME_DIR]/snippets;
 ZINIT[ZCOMPDUMP_PATH]=$ZINIT[HOME_DIR]/zcompdump;
+ZINIT[DEBUG]='1'
 ZPFX=$ZINIT[HOME_DIR]/polaris;
 
 command git diff > ${ZINIT[HOME_DIR]}/unstaged.diff

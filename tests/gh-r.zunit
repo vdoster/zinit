@@ -1,6 +1,5 @@
 #!/usr/bin/env zunit
 
-
 @setup {
   export ZBIN="${ZPFX}/bin"
   export os_type="${OSTYPE//[0-9\.]*/}"
@@ -200,7 +199,7 @@
   run $dua --version; assert $state equals 0
 }
 @test 'duci' { # The simple CI server
-  run zinit lbin'!**/duci' for @duck8823/duci; assert $state equals 0
+  run zinit lbin'!' for @duck8823/duci; assert $state equals 0
   local duci="$ZBIN/duci"; assert "$duci" is_executable
   run $duci version; assert $state equals 0
 }
