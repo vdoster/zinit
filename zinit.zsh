@@ -1978,7 +1978,7 @@ builtin setopt noaliases
     builtin emulate -L zsh -o extendedglob
     REPLY=
     if (( ZINIT[DEBUG] )); then
-        REPLY="$ZINIT[col-dbg]$1"
+        REPLY=${ZINIT[col-dbg]}${ZINIT[col-rst]}${1}${ZINIT[col-rst]}
     fi
 } # ]]]
 
