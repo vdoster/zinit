@@ -494,9 +494,9 @@
   local krew="$ZBIN/krew"; assert "$krew" is_executable
   run $krew version; assert $state equals 0
 }
-@test 'kubedb' { # kubectl` plugin for KubeDB
+@test 'kubectl-dba' { # kubectl` plugin for KubeDB
   run zinit for id-as'kubectl-dba' @kubedb/cli; assert $state equals 0
-  local cli="$ZBIN/kubedb"; assert "$cli" is_executable
+  local cli="$ZBIN/kubectl-dba"; assert "$cli" is_executable
   run "$cli" version; assert $state equals 0
 }
 @test 'lazygit' { # simple terminal UI for git commands
@@ -733,7 +733,7 @@
   run "$shellcheck" --version; assert $state equals 0
 }
 @test 'shfmt' { # A shell parser, formatter, and interpreter with bash support
-  run zinit lbin'!**/sh* -> shfmt' for @mvdan/sh; assert $state equals 0
+  run zinit id-as'shfmt' for @mvdan/sh; assert $state equals 0
   local shfmt="$ZBIN/shfmt"; assert "$shfmt" is_executable
   run $shfmt --version; assert $state equals 0
 }
