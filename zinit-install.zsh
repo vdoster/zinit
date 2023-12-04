@@ -1560,10 +1560,11 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
       if (( !$#list )); then
         +zi-log "{info}[{pre}gh-r{info}] {error}Error{rst}: {ice}bpick{rst} ice found no release assets{rst}. To fix, modify the {ice}bpick{rst} glob pattern {glob}${bpick}{rst}"
       fi
+    else
+      local junk="(386|md5|sig|asc|txt|vsix|sum|sha256*|pkg|([\.]apk|deb|json|rpm|sh))"
+      filtered=( ${list[@]:#(#i)*${~junk}*} ) && (( $#filtered > 0 )) && list=( ${filtered[@]} )
     fi
 
-    local junk="(386|md5|sig|asc|txt|vsix|sum|sha256*|pkg|([\.]apk|deb|json|rpm|sh))"
-    filtered=( ${list[@]:#(#i)*${~junk}*} ) && (( $#filtered > 0 )) && list=( ${filtered[@]} )
 
     local -a array=( $(print -rm "*(${MACHTYPE}|${VENDOR}|)*~^*(${parts[1]}|${(L)$(uname)})*" $list[@]) )
     (( ${#array} > 0 )) && list=( ${array[@]} )
