@@ -5,7 +5,7 @@
   HOME="$ZPFX" # Stops programs creating directories in user home
   export ZBIN="${ZPFX}/bin"
   export os_type="${OSTYPE//[0-9\.]*/}"
-  zinit default-ice --quiet from'gh-r' lbin
+  zinit default-ice --quiet from'gh-r' id-as lbin
 }
 
 # @test 'atmos' {  Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)
@@ -50,7 +50,7 @@
   $alacritty --version; assert $state equals 0
 }
 @test 'alist' { # A file list program that supports multiple storage, powered by Gin and React
-  run zinit lbin'!* -> alist' for @alist-org/alist; assert $state equals 0
+  run zinit for @alist-org/alist; assert $state equals 0
   local alist="$ZBIN/alist"; assert "$alist" is_executable
   run $alist version; assert $state equals 0
 }
@@ -86,7 +86,7 @@
   run $bat --version; assert $state equals 0
 }
 @test 'bazel' { # a fast, scalable, multi-language and extensible build system
-  run zinit lbin"!bazel* -> bazel" for @bazelbuild/bazel; assert $state equals 0
+  run zinit for @bazelbuild/bazel; assert $state equals 0
   local bazel="$ZBIN/bazel"; assert "$bazel" is_executable
   run $bazel --version; assert $state equals 0
 }
@@ -103,12 +103,12 @@
   run $boilr --help; assert $state equals 0
 }
 @test 'booklit' { # a pretty lit content authoring system
-  run zinit for lbin'!* -> booklit' @vito/booklit; assert $state equals 0
+  run zinit for @vito/booklit; assert $state equals 0
   local booklit="$ZBIN/booklit"; assert "$booklit" is_executable
   run "$booklit" --version; assert $state equals 0
 }
 @test 'bottom' { # Yet another cross-platform graphical process/system monitor
-  run zinit lbin'!**/btm' for ClementTsang/bottom; assert $state equals 0
+  run zinit lbin'btm' for ClementTsang/bottom; assert $state equals 0
   local bottom="$ZBIN/btm"; assert "$bottom" is_executable
   run $bottom --version; assert $state equals 0
 }
@@ -119,27 +119,27 @@
   run "$broot" --version; assert $state equals 0
 }
 @test 'btop' { # A monitor of resources
-  run zinit lbin'!**/btop' for aristocratos/btop; assert $state equals 0
+  run zinit for aristocratos/btop; assert $state equals 0
   local btop="$ZBIN/btop"; assert "$btop" is_executable
   run $btop --version; assert $state equals 0
 }
 @test 'calico' { # Cloud native networking and network security
-  run zinit lbin"!* -> calico" for @projectcalico/calico; assert $state equals 0
+  run zinit for @projectcalico/calico; assert $state equals 0
   local calico="$ZBIN/calico"; assert "$calico" is_executable
   run $calico --version; assert $state equals 0
 }
 @test 'certificates' { # An opinionated helper for generating tls certificates
-  run zinit lbin"!* -> certificates" for @mvmaasakkers/certificates; assert $state equals 0
+  run zinit for @mvmaasakkers/certificates; assert $state equals 0
   local certificates="$ZBIN/certificates"; assert "$certificates" is_executable
   run $certificates --version; assert $state equals 0
 }
 @test 'checkmake' { # experimental linter/analyzer for Makefiles
-  run zinit lbin'!checkmake* -> checkmake' for @mrtazz/checkmake; assert $state equals 0
+  run zinit for @mrtazz/checkmake; assert $state equals 0
   local checkmake="$ZBIN/checkmake"; assert "$checkmake" is_executable
   run $checkmake --version; assert $state equals 0
 }
 @test 'cog' { # Containers for machine learning
-  run zinit lbin'!* -> cog' for @replicate/cog; assert $state equals 0
+  run zinit for @replicate/cog; assert $state equals 0
   local cog="$ZBIN/cog"; assert "$cog" is_executable
   run $cog --version; assert $state equals 0
 }
@@ -180,48 +180,48 @@
   run $dive --version; assert $state equals 0
 }
 @test 'docker-buildx' { # A monitor of resources
-  run zinit for lbin'!* -> buildx' @docker/buildx; assert $state equals 0
+  run zinit for @docker/buildx; assert $state equals 0
   local buildx="$ZBIN/buildx"; assert "$buildx" is_executable
   run $buildx version; assert $state equals 0
 }
 @test 'docker-compose' { # Define and run multi-container applications with Docker
-  run zinit lbin'!* -> docker-compose' for @docker/compose; assert $state equals 0
-  local dc="$ZBIN/docker-compose"; assert "$dc" is_executable
+  run zinit for @docker/compose; assert $state equals 0
+  local dc="$ZBIN/compose"; assert "$dc" is_executable
   run $dc --version; assert $state equals 0
 }
 @test 'docker-credential-helpers' { # A monitor of resources
   [[ $OSTYPE =~ 'linux*' ]] && skip "on $os_type"
-  run zinit for lbin'!* -> docker-credential-desktop' @docker/docker-credential-helpers; assert $state equals 0
-  local credential_desktop="$ZBIN/docker-credential-desktop"; assert "$credential_desktop" is_executable
+  run zinit for id-as'docker-credential-osxkeychain' @docker/docker-credential-helpers; assert $state equals 0
+  local credential_desktop="$ZBIN/docker-credential-osxkeychain"; assert "$credential_desktop" is_executable
   run $credential_desktop version; assert $state equals 0
 }
 @test 'documize' { # Modern Confluence alternative designed for internal & external docs, built with Go & Ember JS
-  run zinit lbin'!* -> documize' for @documize/community; assert $state equals 0
+  run zinit id-as'documize' for @documize/community; assert $state equals 0
   local documize="$ZBIN/documize"; assert "$documize" is_executable
   run $documize version; assert $state equals 0
 }
 @test 'dstask' { # Git powered terminal-based todo/note manager -- markdown note page per task
-  run zinit lbin'!*->dstask' bpick'^*import*' for @naggie/dstask; assert $state equals 0
+  run zinit bpick'^*import*' for @naggie/dstask; assert $state equals 0
   local dstask="$ZBIN/dstask"; assert "$dstask" is_executable
   run $dstask version; assert $state equals 0
 }
 @test 'dua' { # View disk space usage and delete unwanted data, fast
-  run zinit lbin'!**/dua' for @Byron/dua-cli; assert $state equals 0
+  run zinit lbin'!dua' for @Byron/dua-cli; assert $state equals 0
   local dua="$ZBIN/dua"; assert "$dua" is_executable
   run $dua --version; assert $state equals 0
 }
 @test 'duci' { # The simple CI server
-  run zinit lbin'!**/duci' for @duck8823/duci; assert $state equals 0
+  run zinit  for @duck8823/duci; assert $state equals 0
   local duci="$ZBIN/duci"; assert "$duci" is_executable
   run $duci version; assert $state equals 0
 }
 @test 'dust' { # A more intuitive version of du in rust
-  run zinit lbin'!**/dust' for @bootandy/dust; assert $state equals 0
+  run zinit for @bootandy/dust; assert $state equals 0
   local dust="$ZBIN/dust"; assert "$dust" is_executable
   run $dust --version; assert $state equals 0
 }
 @test 'dyff' { # diff tool for YAML files, and sometimes JSON
-  run zinit lbin'!**/dyff' for @homeport/dyff; assert $state equals 0
+  run zinit  for @homeport/dyff; assert $state equals 0
   local dyff="$ZBIN/dyff"; assert "$dyff" is_executable
   run $dyff version; assert $state equals 0
 }
@@ -232,12 +232,12 @@
   run $dysk --version; assert $state equals 0
 }
 @test 'etcd' { # Distributed reliable key-value store for the most critical data of a distributed system
-  run zinit lbin'!**/etcd' for @etcd-io/etcd; assert $state equals 0
+  run zinit for @etcd-io/etcd; assert $state equals 0
   local etcd="$ZBIN/etcd"; assert "$etcd" is_executable
   run $etcd --version; assert $state equals 0
 }
 @test 'exa' { # A modern replacement for ls
-  run zinit lbin'!**/exa' for @ogham/exa; assert $state equals 0
+  run zinit for @ogham/exa; assert $state equals 0
   local exa="$ZBIN/exa"; assert "$exa" is_executable
   run $exa --version; assert $state equals 0
 }
@@ -263,7 +263,7 @@
   run $fogg version; assert $state equals 0
 }
 @test 'fx' { # Terminal JSON viewer
-  run zinit lbin'!* -> fx' for @antonmedv/fx; assert $state equals 0
+  run zinit for @antonmedv/fx; assert $state equals 0
   local fx="$ZBIN/fx"; assert "$fx" is_executable
   run $fx -v; assert $state equals 0
 }
@@ -274,7 +274,7 @@
 }
 @test 'gaper' { # Builds and restarts a Go project when it crashes or some watched file changes
   [[ $OSTYPE =~ "linux*" ]] && skip "on $os_type"
-  run zinit lbin'!**/gaper' for @maxcnunes/gaper; assert $state equals 0
+  run zinit lbin'!gaper' for @maxcnunes/gaper; assert $state equals 0
   local gaper="$ZBIN/gaper"; assert "$gaper" is_executable
   run $gaper --version; assert $state equals 0
 }
@@ -345,7 +345,7 @@
   run $git_sizer version; assert $state equals 0
 }
 @test 'go-swagger' { # Swagger 2.0 implementation for go
-  run zinit lbin'!* -> go-swagger' for @go-swagger/go-swagger; assert $state equals 0
+  run zinit id-as'swagger' for @go-swagger/go-swagger; assert $state equals 0
   local git_sizer="$ZBIN/go-swagger"; assert "$git_sizer" is_executable
   run $git_sizer version; assert $state equals 0
 }
@@ -494,8 +494,8 @@
   local krew="$ZBIN/krew"; assert "$krew" is_executable
   run $krew version; assert $state equals 0
 }
-@test 'kubedb' { # `kubectl` plugin for KubeDB
-  run zinit for id-as'kubedb' lbin'*->kubedb' @kubedb/cli; assert $state equals 0
+@test 'kubedb' { # kubectl` plugin for KubeDB
+  run zinit for id-as'kubectl-dba' @kubedb/cli; assert $state equals 0
   local cli="$ZBIN/kubedb"; assert "$cli" is_executable
   run "$cli" version; assert $state equals 0
 }
@@ -763,7 +763,7 @@
   run "$tealdeer" --version; assert $state equals 0
 }
 @test 'tin-summer' { # Find build artifacts that are taking up disk space
-  run zinit for @vmchale/tin-summer; assert $state equals 0
+  run zinit for lbin'sn' @vmchale/tin-summer; assert $state equals 0
   local tin_summer="$ZBIN/sn"; assert "$tin_summer" is_executable
   run "$tin_summer" --version; assert $state equals 0
 }
@@ -815,7 +815,7 @@
   run $wifiqr --version; assert $state equals 0
 }
 @test 'wtf' { # The personal information dashboard for your terminal
-  run zinit lbin'!**/wtf* -> wtf' for wtfutil/wtf; assert $state equals 0
+  run zinit for wtfutil/wtf; assert $state equals 0
   local wtf="$ZBIN/wtf"; assert "$wtf" is_executable
   run $wtf --version; assert $state equals 0
 }

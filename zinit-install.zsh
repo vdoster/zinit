@@ -1535,7 +1535,7 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
   local plugin="$2" urlpart="$3" user="$1"
   local -a bpicks filtered init_list list parts
   parts=(${(@s:;:)$(.zi::get-architecture)})
-  # +zi-log "{info}[{pre}gh-r{info}]{rst} filters -> {glob}${(@)parts}{rst}"
+  # +zi-log "{dbg} {b}gh-r{rst}: filters -> {glob}${(@)parts}{rst}"
   if [[ -z $urlpart ]]; then
     local tag_version=${ICE[ver]}
     if [[ -z $tag_version ]]; then
@@ -1567,9 +1567,9 @@ builtin source "${ZINIT[BIN_DIR]}/zinit-side.zsh" || {
 
     local -a array=( $(print -rm "*(${MACHTYPE}|${VENDOR}|)*~^*(${parts[1]}|${(L)$(uname)})*" $list[@]) )
     (( ${#array} > 0 )) && list=( ${array[@]} )
-    +zi-log -- "{dbg} filtered ${#filtered} to ${#array} release assets"
+    +zi-log -- "{dbg} {b}gh-r{rst}filtered ${#filtered} to ${#array} release assets"
 
-    +zi-log -- "{dbg}${(@pj:\n  - :)list[1,2]}{nl}"
+    +zi-log -- "{dbg} ${${(@pj:\n  - :)list[1,2]}:t}{nl}"
     for part in "${parts[@]}"; do
       if (( $#list > 1 )); then
         filtered=( ${(M)list[@]:#(#i)*${~part}*} ) && (( $#filtered > 0 )) && list=( ${filtered[@]} )

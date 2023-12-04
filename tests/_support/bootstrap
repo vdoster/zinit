@@ -26,6 +26,7 @@ ZINIT[COMPLETIONS_DIR]=$ZINIT[HOME_DIR]/completions;
 ZINIT[PLUGINS_DIR]=$ZINIT[HOME_DIR]/plugins;
 ZINIT[SNIPPETS_DIR]=$ZINIT[HOME_DIR]/snippets;
 ZINIT[ZCOMPDUMP_PATH]=$ZINIT[HOME_DIR]/zcompdump;
+ZINIT[DEBUG]='1'
 ZPFX=$ZINIT[HOME_DIR]/polaris;
 
 command git diff > ${ZINIT[HOME_DIR]}/unstaged.diff
@@ -56,13 +57,11 @@ source $ZINIT[BIN_DIR]/zinit.zsh
 # ]]]
 # Install Annexes [[[
 info 'installing test dependencies'
-for annex (binary-symlink default-ice); do
-  if [[ ! -d ${GIT_REPO}/tests/_support/$annex ]]; then;
-    git clone https://github.com/zdharma-continuum/zinit-annex-$annex ${GIT_REPO:A}/tests/_support/$annex
-  fi
-  zinit light ${GIT_REPO:A}/tests/_support/$annex
-  info "loaded $annex dependencies"
-done
+zinit for \
+  @zdharma-continuum/zinit-annex-default-ice \
+    ver'feat/logging' \
+  @zdharma-continuum/zinit-annex-binary-symlink
+info "loaded $annex dependencies"
 # ]]]
 
 # vim:ft=zsh:sw=2:sts=2:et:foldmarker=[[[,]]]:foldmethod=marker

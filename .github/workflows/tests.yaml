@@ -60,19 +60,19 @@ jobs:
       #   run: sudo spctl --master-disable
 
       - name: "annexes"
-        run: zunit run tests/annexes.zunit
+        run: zunit run --verbose tests/annexes.zunit
 
       - name: "commands"
-        run: zunit run tests/commands.zunit
-
-      - name: "gh-r"
-        run: zunit run --fail-fast --verbose tests/gh-r.zunit
+        run: zunit run --verbose tests/commands.zunit
 
       - name: "ices"
-        run: zunit run tests/ices.zunit
+        run: zunit run --verbose tests/ices.zunit
 
       - name: "plugins"
-        run: zunit run tests/plugins.zunit
+        run: zunit run --verbose tests/plugins.zunit
 
       - name: "snippets"
-        run: zunit run tests/snippets.zunit
+        run: zunit run --verbose tests/snippets.zunit
+
+      - name: "gh-r"
+        run: zunit run --fail-fast tests/gh-r.zunit
