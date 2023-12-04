@@ -43,6 +43,14 @@
   assert $output contains 'Loaded: '
   assert $state equals 0
 }
+@test 'help' {
+  run zinit --help
+  assert $output contains '—— help                          – usage information'
+  run zinit -h
+  assert $output contains '—— help                          – usage information'
+  run zinit help
+  assert $output contains '—— help                          – usage information'
+}
 @test 'self-update' {
   run zinit self-update
   assert $output contains 'Already up-to-date.'
