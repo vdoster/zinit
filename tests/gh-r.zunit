@@ -346,7 +346,7 @@
 }
 @test 'go-swagger' { # Swagger 2.0 implementation for go
   run zinit id-as'swagger' for @go-swagger/go-swagger; assert $state equals 0
-  local git_sizer="$ZBIN/go-swagger"; assert "$git_sizer" is_executable
+  local git_sizer="$ZBIN/swagger"; assert "$git_sizer" is_executable
   run $git_sizer version; assert $state equals 0
 }
 @test 'gojq' { # Pure Go implementation of jq
@@ -413,7 +413,7 @@
   run $hexyl --version; assert $state equals 0
 }
 @test 'hit-on' { # Git Workflow Helper Tool
-  run zinit lbin'!* -> hit' for kowainik/hit-on; assert $state equals 0
+  run zinit id-as'hit' for kowainik/hit-on; assert $state equals 0
   local hit="$ZBIN/hit"; assert "$hit" is_executable
   run $hit --version; assert $state equals 0
 }
@@ -475,8 +475,8 @@
 }
 @test 'keepassxc' { # a cross-platform community-driven port of the Windows application Keepass Password Safe
   [[ $OSTYPE =~ 'linux*' ]] && skip "skipped on $os_type"
-  run zinit for lbin'!*-cli -> keepassxc-cli' @keepassxreboot/keepassxc; assert $state equals 0
-  local keepassxc="$ZBIN/keepassxc-cli"; assert "$keepassxc" is_executable
+  run zinit for lbin'!*cli' @keepassxreboot/keepassxc; assert $state equals 0
+  local keepassxc="$ZBIN/keepassxc"; assert "$keepassxc" is_executable
   run $keepassxc --version; assert $state equals 0
 }
 @test 'ko' { # Build and deploy Go applications on Kubernetes
@@ -686,7 +686,7 @@
   run "$rclone" --version; assert $state equals 0
 }
 @test 'reg' { # Docker registry v2 command line client and repo listing generator with security checks
-  run zinit lbin'!* -> reg' for @genuinetools/reg; assert $state equals 0
+  run zinit for @genuinetools/reg; assert $state equals 0
   local reg="$ZBIN/reg"; assert "$reg" is_executable
   run "$reg" version; assert $state equals 0
 }
