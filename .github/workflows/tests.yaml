@@ -42,6 +42,7 @@ jobs:
       - name: "install musl"
         if: runner.os == 'Linux'
         run: |
+          sudo apt-get update --yes
           sudo apt-get install --yes \
             autoconf automake autotools-dev \
             build-essential byacc\
