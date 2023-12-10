@@ -75,9 +75,7 @@ jobs:
         shell: zsh {0}
         run: |
           ls -1 ./tests/*zunit | parallel \
-            --eta \
             --joblog /tmp/log \
             --keep-order \
-            --progress \
             -j4 \
           $HOME/.local/bin/zunit run
