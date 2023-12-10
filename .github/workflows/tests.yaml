@@ -42,7 +42,6 @@ jobs:
       - name: "install musl"
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update --yes
           sudo apt-get install --yes \
             autoconf automake autotools-dev \
             build-essential byacc\
@@ -52,7 +51,7 @@ jobs:
             libc6 libc6-dev libevent-dev libncurses5-dev libncursesw5-dev libtool libuvc0 lua5.1 \
             m4 \
             ninja-build \
-            pkg-config \
+            pkg-config parallel \
             unzip \
             xz-utils \
             zsh
@@ -61,7 +60,7 @@ jobs:
         id: install-deps
         run: |
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-          brew install --force --overwrite autoconf automake binutils byacc cmake coreutils curl gettext gnu-sed libevent libtool libuv lua lua@5.1 make ninja ncurses pkg-config texinfo unzip xz zsh
+          brew install --force --overwrite autoconf automake binutils byacc cmake coreutils gettext gnu-sed libevent libtool libuv lua lua@5.1 make ncurses pkg-config texinfo unzip xz zsh parallel
           brew link --force --overwrite ncurses
 
       - name: "install zunit"
@@ -71,20 +70,14 @@ jobs:
           git clone --depth 1 https://github.com/zdharma-continuum/zunit; cd ./zunit
           zsh -c -l './build.zsh' && sudo chmod u+x ./zunit && cp ./zunit "$HOME/.local/bin/"
 
-      - name: "commands"
-        run: zunit run tests/commands.zunit
+      # - name: disable secssessment system policy security
+      #   run: sudo spctl --master-disable
 
-      - name: "plugins"
-        run: zunit run tests/plugins.zunit
-
-      - name: "gh-r"
-        run: zunit run tests/gh-r.zunit
-
-      - name: "annexes"
-        run: zunit run tests/annexes.zunit
-
-      - name: "ices"
-        run: zunit run tests/ices.zunit
-
-      - name: "snippets"
-        run: zunit run tests/snippets.zunit
+      - name: "zunit"
+        run: |
+          time parallel \
+            --joblog /tmp/log \
+            -j0 \
+            --eta \
+            --tty zsh -il \
+              -c 'cd ~/.local/share/zinit/zinit.git/tests; zunit run {}; echo "zunit run {}" >> zunit-cmds.sh' <<< $(ls -a tests/*zunit)
