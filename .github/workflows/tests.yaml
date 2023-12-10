@@ -80,4 +80,4 @@ jobs:
             --keep-order \
             --progress \
             -j4 \
-          $HOME/.locl/bin/zunit run
+          $HOME/.local/bin/zunit run
