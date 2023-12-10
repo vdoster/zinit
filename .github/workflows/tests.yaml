@@ -79,5 +79,5 @@ jobs:
             --joblog /tmp/log \
             --keep-order \
             --progress \
-            -jobs 4 \
+            -j4 \
           $HOME/.locl/bin/zunit run
