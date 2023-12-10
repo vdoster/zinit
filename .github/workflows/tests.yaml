@@ -73,6 +73,5 @@ jobs:
 
       - name: zunit
         shell: zsh {0}
-        working-directory: $HOME/.local/share/zinit/zinit.git
         run: |
           ls -1 ./tests/*zunit | parallel --joblog /tmp/log  -j4 --linebuffer $HOME/.local/bin/zunit run
