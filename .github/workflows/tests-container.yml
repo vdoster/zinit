@@ -24,9 +24,9 @@ jobs:
           username: vladdoster
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: "login"
-        run: |
-          docker pull ghcr.io/vdoster/zunit:latest
+      # - name: "login"
+      #   run: |
+      #     docker pull ghcr.io/vdoster/zunit:latest
 
       - name: "zunit"
         run: |
