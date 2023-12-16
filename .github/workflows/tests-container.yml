@@ -1,0 +1,13 @@
+name: zunit container
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+jobs:
+  test:
+       runs-on: ubuntu-latest
+       steps:
+         - name: ZUnit step
+         - uses: actions/checkout@v4
+         - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u vladdoster --password-stdin
+         - run: docker run -t --rm -v $PWD:/app:ro ghcr.io/vdoster/zunit:latest
