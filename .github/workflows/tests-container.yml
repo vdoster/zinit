@@ -17,9 +17,15 @@ jobs:
         with:
           fetch-depth: 0
           
+      - name: github container registry authentication
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: "login"
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u vladdoster --password-stdin
           docker pull ghcr.io/vdoster/zunit:latest
 
       - name: "zunit"
