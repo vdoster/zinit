@@ -3,11 +3,24 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+
+env:
+  TERM: xterm-256color
+
 jobs:
-  test:
-       runs-on: ubuntu-latest
-       steps:
-         - name: ZUnit step
-         - uses: actions/checkout@v4
-         - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u vladdoster --password-stdin
-         - run: docker run -t --rm -v $PWD:/app:ro ghcr.io/vdoster/zunit:latest
+  zunit-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: "login"
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u vladdoster --password-stdin
+
+      - name: "zunit"
+        run: |
+          docker run -t --rm -v $PWD:/app:ro ghcr.io/vdoster/zunit:latest
