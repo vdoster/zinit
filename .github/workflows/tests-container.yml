@@ -24,4 +24,4 @@ jobs:
 
       - name: "zunit"
         run: |
-          docker run -t --rm -v $PWD:/app:rw vdoster/zunit:latest tests/
+          docker run -t --rm -v $PWD:/app:rw vdoster/zunit:latest ./tests/
