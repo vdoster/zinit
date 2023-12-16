@@ -20,6 +20,7 @@ jobs:
       - name: "login"
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u vladdoster --password-stdin
+          docker pull ghcr.io/vdoster/zunit:latest
 
       - name: "zunit"
         run: |
