@@ -68,10 +68,10 @@ builtin hash -d zpfx=$zi_test_dir/polaris
 builtin hash -d plugins=$zi_test_dir/plugins
 {
   zinit for \
-    @zdharma-continuum/zinit-annex-linkman \
-    @zdharma-continuum/zinit-annex-default-ice \
+    @zdharma-continuum/zinit-annex-bin-gem-node \
     @zdharma-continuum/zinit-annex-binary-symlink \
-    @zdharma-continuum/zinit-annex-bin-gem-node
+    @zdharma-continuum/zinit-annex-default-ice \
+    @zdharma-continuum/zinit-annex-linkman
 }>/dev/null
 
 +zi-log "{m} loaded $annex dependencies"
