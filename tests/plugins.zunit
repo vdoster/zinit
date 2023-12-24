@@ -46,7 +46,7 @@
   run "$jq" --version; assert $state equals 0
 }
 @test 'ncurses' {
-  run zinit configure"'$(print -- --enable-{'widec','termcap'})'" make for @mirror/ncurses; assert $state equals 0
+  run zinit configure'--enable-widec --enable-termcap' make for @mirror/ncurses; assert $state equals 0
   local ncurses="$ZBIN/clear"; assert "$ncurses" is_executable
   run "$ncurses" -V; assert $state equals 0
   run zinit delete --yes mirror/ncurses; assert $state equals 0
