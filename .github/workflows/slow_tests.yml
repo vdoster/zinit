@@ -1,4 +1,4 @@
-name: Unit tests
+name: Slow tests
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,11 +19,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "tests/**"
-      - "share/**"
-      - "zinit*.zsh"
-      - ".github/workflows/tests.yaml"
   workflow_dispatch:
 
 jobs:
@@ -57,7 +52,7 @@ jobs:
             libc6 libc6-dev libevent-dev libncurses5-dev libncursesw5-dev libtool libuvc0 lua5.1 \
             m4 \
             ninja-build \
-            pkg-config parallel \
+            pkg-config \
             unzip \
             xz-utils \
             zsh
@@ -66,7 +61,7 @@ jobs:
         id: install-deps
         run: |
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-          brew install --force --overwrite autoconf automake binutils byacc cmake coreutils gettext gnu-sed libevent libtool libuv lua lua@5.1 make ncurses pkg-config texinfo unzip xz zsh parallel
+          brew install --force --overwrite autoconf automake binutils byacc cmake coreutils curl gettext gnu-sed libevent libtool libuv lua lua@5.1 make ninja ncurses pkg-config texinfo unzip xz zsh
           brew link --force --overwrite ncurses
 
       - name: "install zunit"
@@ -76,11 +71,20 @@ jobs:
           git clone --depth 1 https://github.com/zdharma-continuum/zunit; cd ./zunit
           zsh -c -l './build.zsh' && sudo chmod u+x ./zunit && cp ./zunit "$HOME/.local/bin/"
 
-      - name: zunit
-        shell: zsh {0}
-        run: |
-          ls -1 ./tests/*zunit | parallel \
-            --joblog /tmp/log \
-            --keep-order \
-            -j4 \
-          $HOME/.local/bin/zunit run
+      - name: "commands"
+        run: zunit run tests/commands.zunit
+
+      - name: "plugins"
+        run: zunit run tests/plugins.zunit
+
+      - name: "gh-r"
+        run: zunit run tests/gh-r.zunit
+
+      - name: "annexes"
+        run: zunit run tests/annexes.zunit
+
+      - name: "ices"
+        run: zunit run tests/ices.zunit
+
+      - name: "snippets"
+        run: zunit run tests/snippets.zunit

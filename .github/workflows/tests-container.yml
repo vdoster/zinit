@@ -1,0 +1,27 @@
+name: zunit container
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  TERM: xterm-256color
+
+jobs:
+  zunit-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: checkout ${{ github.repository }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "zunit"
+        run: |
+          docker run -t --rm -v $PWD:/app:rw vdoster/zunit:latest
