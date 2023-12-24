@@ -1,7 +1,7 @@
-emulate -L zsh
-setopt no_global_rcs no_rcs no_aliases extended_glob null_glob
+emulate zsh
+setopt no_global_rcs no_rcs no_aliases extended_glob
 
-# Log functions [[[
+# ]]# Log functions [[[
 function error(){ print -P "%F{red}[ERROR]%f: ${1}" && return 1; }
 function info() { print -P "%F{green}[INFO]%f:%F{cyan} ${1} %f"; }
 function warn() { print -P "%F{yellow}[WARN]%f: ${1}"; }
@@ -68,7 +68,6 @@ hash -f
 builtin hash -d zinit=$zi_test_dir
 builtin hash -d zpfx=$zi_test_dir/polaris
 builtin hash -d plugins=$zi_test_dir/plugins
-# ]]]
 # Install Annexes [[[
 # +zi-log '{m} installing test dependencies'
 zinit for \

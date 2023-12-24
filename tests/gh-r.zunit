@@ -1,14 +1,17 @@
 #!/usr/bin/env zunit
 
-
-
-
 @setup {
-  HOME="$ZPFX" # Stops programs creating directories in user home
-  export ZBIN="${ZPFX}/bin"
-  export os_type="${OSTYPE//[0-9\.]*/}"
-  load "${PWD}/tests/_support/annex_test_assertions"
-  zinit default-ice --quiet from'gh-r' lbin
+    load "${PWD}/tests/_support/annex_test_assertions"
+    HOME="$zi_test_dir"
+    # ZBIN="$zi_dir/polaris/bin"
+    typeset -gx ZBIN="$zi_test_dir/polaris/bin"
+    # HOME="$ZPFX" # Stops programs creating directories in user home
+    # export ZBIN="${ZPFX}/bin"
+    [[ ! -d $ZBIN ]] && mkdir -p "$ZBIN"
+    # export ZBIN="${ZPFX}/bin"
+    export os_type="${OSTYPE//[0-9\.]*/}"
+    zinit default-ice --quiet from'gh-r' lbin'!' null
+    # zinit default-ice --quiet from'gh-r' lbin'!'
 }
 
 # @test 'atmos' {  Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)
@@ -39,7 +42,7 @@
 @test 'act' { # Run your GitHub Actions locally
   run zinit for @nektos/act; assert $state equals 0
   local act="$ZBIN/act"; assert "$act" is_executable
-  $act --version; assert $state equals 0
+  run "$act" --version; assert $state equals 0
 }
 @test 'akamai' { # Manage and configure Akamai from the Command Line.
   run zinit id-as'akamai' lbin'akamai*->akamai' for @akamai/cli; assert $state equals 0
@@ -81,7 +84,7 @@
   [[ $OSTYPE =~ 'darwin*' ]] && skip "on $os_type"
   run zinit for @imsnif/bandwhich; assert $state equals 0
   local bandwhich="$ZBIN/bandwhich"; assert "$bandwhich" is_executable
-  run $bandwhich --help; assert $state equals 0
+  run "$bandwhich" --version; assert $state equals 0
 }
 @test 'bat' { # A cat(1) clone with wings
   run zinit for @sharkdp/bat; assert $state equals 0
