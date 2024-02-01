@@ -2612,8 +2612,7 @@ zinit() {
     )
 
     cmd="$1"
-    if [[ $cmd == (times|unload|env-whitelist|update|snippet|load|light|cdreplay|\
-cdclear) ]]; then
+    if [[ $cmd == (times|unload|env-whitelist|update|snippet|load|light|cdreplay|cdclear) ]]; then
         if (( $@[(I)-*] || OPTS[opt_-h,--help] )); then
             .zinit-parse-opts "$cmd" "$@"
             if (( OPTS[opt_-h,--help] )); then
@@ -2922,7 +2921,7 @@ You can try to prepend {apo}${___q}{lhi}@{apo}'{error} to the ID if the last ice
                    { "${reply[5]}" "$@"; return $?; } || \
                    { +zi-log "({error}Couldn't find the subcommand-handler \`{obj}${reply[5]}{error}' of the z-annex \`{file}${reply[3]}{error}')"; return 1; }
            }
-           (( ${+functions[.zinit-confirm]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-autoload.zsh" || return 1
+           builtin source "${ZINIT[BIN_DIR]}/zinit-autoload.zsh" || return 1
            case "$1" in
                 (zstatus)
                     .zinit-show-zstatus
@@ -2935,8 +2934,7 @@ You can try to prepend {apo}${___q}{lhi}@{apo}'{error} to the ID if the last ice
                     .zinit-show-times "${@[2-correct,-1]}"
                     ;;
                 (self-update)
-                    .zinit-self-update
-                    ;;
+                    shift && .zinit-self-update "$@" ;;
                 (unload)
                     (( ${+functions[.zinit-unload]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-autoload.zsh" || return 1
                     if [[ -z $2 && -z $3 ]]; then

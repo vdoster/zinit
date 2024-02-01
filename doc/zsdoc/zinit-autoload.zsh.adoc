@@ -55,6 +55,9 @@ Documentation automatically generated with `zshelldoc'
  .zinit-save-set-extendedglob
  .zinit-search-completions
  .zinit-self-update
+ .zinit-self-update_check_for_update
+ .zinit-self-update_core
+ .zinit-self-update_usage
  .zinit-show-all-reports
  .zinit-show-completions
  .zinit-show-debug-report
@@ -96,9 +99,7 @@ Has 12 line(s). Calls functions:
  .zi-check-for-git-changes
  `-- zinit.zsh/+zi-log
 
-Called by:
-
- .zinit-self-update
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
 
 ==== .zinit-any-to-uspl2
 
@@ -915,7 +916,6 @@ Uses feature(s): _setopt_
 Called by:
 
  .zinit-glance
- .zinit-self-update
  .zinit-update-or-status
 
 ==== .zinit-prepare-readlink
@@ -1069,25 +1069,72 @@ Called by:
 
 ____
  
- Updates Zinit code (does a git pull)
+ Update the zulu core
 
 ____
 
-Has 44 line(s). Calls functions:
+Has 27 line(s). Calls functions:
 
  .zinit-self-update
- |-- .zi-check-for-git-changes
+ |-- .zinit-self-update_check_for_update
  |   `-- zinit.zsh/+zi-log
- |-- .zinit-pager
- |-- zinit.zsh/+zi-log
- `-- zinit.zsh/.zinit-get-mtime-into
+ |-- .zinit-self-update_usage
+ `-- zinit.zsh/+zi-log
 
-Uses feature(s): _setopt_, _source_, _zcompile_
+Uses feature(s): _zparseopts_
 
 Called by:
 
  .zinit-update-or-status-all
  zinit.zsh/zinit
+
+==== .zinit-self-update_check_for_update
+
+____
+ 
+ Update the zulu core
+
+____
+
+Has 15 line(s). Calls functions:
+
+ .zinit-self-update_check_for_update
+ `-- zinit.zsh/+zi-log
+
+Called by:
+
+ .zinit-self-update
+
+==== .zinit-self-update_core
+
+____
+ 
+ Update the zulu core
+
+____
+
+Has 8 line(s). Calls functions:
+
+ .zinit-self-update_core
+ `-- zinit.zsh/+zi-log
+
+Uses feature(s): _source_
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+
+==== .zinit-self-update_usage
+
+____
+ 
+ Print usage information
+
+____
+
+Has 6 line(s). Doesn't call other functions.
+
+Called by:
+
+ .zinit-self-update
 
 ==== .zinit-show-all-reports
 
@@ -1520,11 +1567,10 @@ Has 133 line(s). Calls functions:
 
  .zinit-update-or-status-all
  |-- .zinit-self-update
- |   |-- .zi-check-for-git-changes
+ |   |-- .zinit-self-update_check_for_update
  |   |   `-- zinit.zsh/+zi-log
- |   |-- .zinit-pager
- |   |-- zinit.zsh/+zi-log
- |   `-- zinit.zsh/.zinit-get-mtime-into
+ |   |-- .zinit-self-update_usage
+ |   `-- zinit.zsh/+zi-log
  |-- .zinit-update-all-parallel
  |   |-- .zinit-update-or-status
  |   |   |-- .zinit-pager

@@ -139,6 +139,8 @@ Called by:
  zinit-autoload.zsh/.zinit-list-plugins
  zinit-autoload.zsh/.zinit-run-delete-hooks
  zinit-autoload.zsh/.zinit-self-update
+ zinit-autoload.zsh/.zinit-self-update_check_for_update
+ zinit-autoload.zsh/.zinit-self-update_core
  zinit-autoload.zsh/.zinit-show-zstatus
  zinit-autoload.zsh/.zinit-uninstall-completions
  zinit-autoload.zsh/.zinit-unload
@@ -546,7 +548,6 @@ Has 7 line(s). Doesn't call other functions.
 Called by:
 
  Script-Body
- zinit-autoload.zsh/.zinit-self-update
  zinit-autoload.zsh/.zinit-update-or-status-all
 
 ==== .zinit-get-object-path
