@@ -6,13 +6,16 @@ DOC_SRC := $(foreach wrd,$(SRC),../$(wrd))
 
 .PHONY: all clean container doc doc/container tags tags/emacs tags/vim test zwc
 
+clean-docs:
+	rm -rf doc/zsdoc/{data/,zinit{'','-additional','-autoload','-install','-side'}.zsh.adoc}
+
 clean:
-	rm -rf *.zwc doc/zsdoc/zinit{'','-additional','-autoload','-install','-side'}.zsh.adoc doc/zsdoc/data/
+	rm -rf */**/tmp.* *.zwc
 
 container:
 	docker build --tag=ghcr.io/zdharma-continuum/zinit:latest --file=docker/Dockerfile .
 
-doc: clean
+doc: clean-docs
 	cd doc; zsh -l -d -f -i -c "zsd -v --scomm --cignore '(\#*FUNCTION:[[:space:]][\:\∞\.\+\@\-a-zA-Z0-9]*[\[]*|}[[:space:]]\#[[:space:]][\]]*)' $(DOC_SRC)"
 
 doc/container: container

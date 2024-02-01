@@ -459,18 +459,18 @@ Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
 
 ____
  
- Deletes a plugin or snippet and related files and hooks.
+ Deletes a plugin or snippet and related files and hooks
  
  $1 - snippet url or plugin
 
 ____
 
-Has 111 line(s). Calls functions:
+Has 129 line(s). Calls functions:
 
  .zinit-delete
  |-- .zinit-prompt
  |-- .zinit-run-delete-hooks
- |   `-- zinit-side.zsh/.zinit-countdown
+ |   `-- zinit.zsh/+zi-log
  |-- zinit.zsh/+zi-log
  |-- zinit.zsh/.zinit-any-to-user-plugin
  `-- zinit.zsh/zinit
@@ -854,7 +854,7 @@ Called by:
 
 ____
  
- Lists loaded plugins (subcommands list, lodaded)
+ Lists loaded plugins
 
 ____
 
@@ -898,7 +898,6 @@ Has 24 line(s). Calls functions:
 Called by:
 
  .zinit-build-module
- zinit.zsh/Script-Body
  zinit.zsh/zinit
 
 ==== .zinit-pager
@@ -1014,10 +1013,10 @@ Called by:
 
 ==== .zinit-run-delete-hooks
 
-Has 17 line(s). Calls functions:
+Has 33 line(s). Calls functions:
 
  .zinit-run-delete-hooks
- `-- zinit-side.zsh/.zinit-countdown
+ `-- zinit.zsh/+zi-log
 
 Uses feature(s): _eval_
 

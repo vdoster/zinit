@@ -31,21 +31,25 @@ ZINIT+=(
   COMPLETIONS_DIR "${zi_test_dir}/completions" SNIPPETS_DIR "${zi_test_dir}/snippets"
   HOME_DIR        "${zi_test_dir}"             PLUGINS_DIR  "${zi_test_dir}/plugins"
   ZCOMPDUMP_PATH  "${zi_test_dir}/zcompdump"   ZPFX         "${zi_test_dir}/polaris"
-  POLARIS         "${zi_test_dir}/polaris"
+  POLARIS         "${zi_test_dir}/polaris"     DEBUG        "true"
 )
 typeset -gxH ZPFX=
 ZPFX="${zi_test_dir}/polaris"
 
-command git diff > ${ZINIT[HOME_DIR]}/unstaged.diff
+command git diff \
+  --find-copies-harder \
+  --ignore-blank-lines --ignore-space-at-eol --ignore-space-change \
+  --irreversible-delete \
+  --minimal > "${zi_test_dir}"/unstaged.diff
 # info 'creating test env'
-git clone \
+command git clone \
     --quiet \
     --depth=1 \
     --dissociate \
     --no-hardlinks \
     --reference "${GIT_REPO}" \
     file://${GIT_REPO:A} \
-    "${ZINIT[BIN_DIR]}" >/dev/null
+    "${zi_test_dir}/zinit.git" >/dev/null
 if (( $? != 0 )); then
     error "Unable to copy ${GIT_REPO} to ${TMP_ZUNIT}" >&2
     exit 1
@@ -74,9 +78,10 @@ builtin hash -d plugins="${zi_test_dir}/plugins"
 {
   zinit for \
     @zdharma-continuum/zinit-annex-bin-gem-node \
+      ver'fix/binary-selection-glob' \
     @zdharma-continuum/zinit-annex-binary-symlink \
     @zdharma-continuum/zinit-annex-default-ice \
     @zdharma-continuum/zinit-annex-linkman
-}>/dev/null
+}
 
 zinit zstatus

@@ -172,7 +172,6 @@ builtin autoload -Uz is-at-least
 is-at-least 5.1 && ZINIT[NEW_AUTOLOAD]=1 || ZINIT[NEW_AUTOLOAD]=0
 #is-at-least 5.4 && ZINIT[NEW_AUTOLOAD]=2
 
-# Parameters [[[
 # temporary substituting of functions
 ZINIT[TMP_SUBST]=inactive ZINIT[DTRACE]=0 ZINIT[CUR_PLUGIN]=
 
@@ -194,9 +193,7 @@ ZINIT_2MAP=(
     PZT:: https://raw.githubusercontent.com/sorin-ionescu/prezto/master/
     PZTM:: https://raw.githubusercontent.com/sorin-ionescu/prezto/master/modules/
 )
-# ]]]
 
-# Init [[[
 zmodload zsh/zutil || { builtin print -P "%F{196}zsh/zutil module is required, aborting Zinit set up.%f"; return 1; }
 zmodload zsh/parameter || { builtin print -P "%F{196}zsh/parameter module is required, aborting Zinit set up.%f"; return 1; }
 zmodload zsh/term{cap,info} 2>/dev/null
@@ -255,7 +252,6 @@ ZINIT_ZLE_HOOKS_LIST=(
     paste-insert 1
 )
 builtin setopt noaliases
-# ]]]
 
 #
 # Temporary substituting of functions-related functions.
@@ -1055,6 +1051,7 @@ builtin setopt noaliases
 
     return 0
 } # ]]]
+
 # FUNCTION: .zinit-util-shands-path [[[
 # Replaces parts of path with %HOME, etc.
 .zinit-util-shands-path() {
@@ -1068,6 +1065,7 @@ builtin setopt noaliases
     REPLY=${${1/(#b)(#s)(%|)(${(~j:|:)${(@k)map:#$HOME}}|$HOME|)/$map[$match[2]]}}
     return 0
 } # ]]]
+
 # FUNCTION: .zinit-find-other-matches [[[
 # Plugin's main source file is in general `name.plugin.zsh'. However,
 # there can be different conventions, if that file is not found, then
@@ -1170,41 +1168,42 @@ builtin setopt noaliases
     return $(( 1 - exists ))
 } # ]]]
 # FUNCTION: @zinit-substitute [[[
-@zinit-substitute() {
+@zinit-substitute () {
     builtin emulate -LR zsh ${=${options[xtrace]:#off}:+-o xtrace}
     builtin setopt extendedglob warncreateglobal typesetsilent noshortloops
-
     local -A ___subst_map
     ___subst_map=(
-        "%ID%"   "${id_as_clean:-$id_as}"
-        "%USER%" "$user"
+        "%DIR%"    "${local_path:-$local_dir${dirname:+/$dirname}}"
+        "%ID%"     "${id_as_clean:-$id_as}"
         "%PLUGIN%" "${plugin:-$save_url}"
-        "%URL%" "${save_url:-${user:+$user/}$plugin}"
-        "%DIR%" "${local_path:-$local_dir${dirname:+/$dirname}}"
-        '$ZPFX' "$ZPFX"
-        '${ZPFX}' "$ZPFX"
-        '%OS%' "${OSTYPE%(-gnu|[0-9]##)}" '%MACH%' "$MACHTYPE" '%CPU%' "$CPUTYPE"
-        '%VENDOR%' "$VENDOR" '%HOST%' "$HOST" '%UID%' "$UID" '%GID%' "$GID"
+        "%URL%"    "${save_url:-${user:+$user/}$plugin}"
+        "%USER%"   "$user"
+        '$ZPFX'    "$ZPFX"
+        '${ZPFX}'  "$ZPFX"
+        '%CPU%'    "$CPUTYPE"
+        '%GID%'    "$GID"
+        '%HOST%'   "$HOST"
+        '%MACH%'   "$MACHTYPE"
+        '%OS%'     "${OSTYPE%(-gnu|[0-9]##)}"
+        '%UID%'    "$UID"
+        '%VENDOR%' "$VENDOR"
     )
-    if [[ -n ${ICE[param]} && ${ZINIT[SUBST_DONE_FOR]} != ${ICE[param]} ]] {
+    if [[ -n ${ICE[param]} && ${ZINIT[SUBST_DONE_FOR]} != ${ICE[param]} ]]; then
         ZINIT[SUBST_DONE_FOR]=${ICE[param]}
         ZINIT[PARAM_SUBST]=
         local -a ___params
-        ___params=( ${(s.;.)ICE[param]} )
+        ___params=(${(s.;.)ICE[param]})
         local ___param ___from ___to
-        for ___param ( ${___params[@]} ) {
-            local ___from=${${___param%%([[:space:]]|)(->|→)*}##[[:space:]]##} \
-                ___to=${${___param#*(->|→)([[:space:]]|)}%[[:space:]]}
-            ___from=${___from//((#s)[[:space:]]##|[[:space:]]##(#e))/}
-            ___to=${___to//((#s)[[:space:]]##|[[:space:]]##(#e))/}
+        for ___param in ${___params[@]}; do
+            local ___from=${${___param%%([[:space:]]|)(->|→)*}##[[:space:]]##} ___to=${${___param#*(->|→)([[:space:]]|)}%[[:space:]]}
+            ___from="${(MS)___from##[[:graph:]]*[[:graph:]]}"
+            ___to="${(MS)___to##[[:graph:]]*[[:graph:]]}"
             ZINIT[PARAM_SUBST]+="%${(q)___from}% ${(q)___to} "
-        }
-    }
-
+        done
+    fi
     local -a ___add
-    ___add=( "${ICE[param]:+${(@Q)${(@z)ZINIT[PARAM_SUBST]}}}" )
-    (( ${#___add} % 2 == 0 )) && ___subst_map+=( "${___add[@]}" )
-
+    ___add=("${ICE[param]:+${(@Q)${(@z)ZINIT[PARAM_SUBST]}}}")
+    (( ${#___add} % 2 == 0 )) && ___subst_map+=("${___add[@]}")
     local ___var_name
     for ___var_name; do
         local ___value=${(P)___var_name}
@@ -3214,7 +3213,6 @@ functions -M -- zinit_scheduler_add 1 1 -zinit_scheduler_add_sh 2>/dev/null
 zmodload zsh/zpty zsh/system 2>/dev/null
 zmodload -F zsh/stat b:zstat 2>/dev/null && ZINIT[HAVE_ZSTAT]=1
 
-# code [[[
 if [[ -z $ZINIT[NO_ALIASES] ]]; then
     builtin alias zpl=zinit zplg=zinit zi=zinit zini=zinit
 fi
@@ -3238,35 +3236,34 @@ zstyle ':prezto:module:completion' loaded 1
 zstyle ':completion:*:zinit:argument-rest:plugins' list-colors '=(#b)(*)/(*)==1;35=1;33'
 zstyle ':completion:*:zinit:argument-rest:plugins' matcher 'r:|=** l:|=*'
 zstyle ':completion:*:*:zinit:*' group-name ""
-# ]]]
 
-# module recompilation for the project rename. [[[
-if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
-    if [[ ! -f ${${ZINIT[BIN_DIR]}}/zmodules/COMPILED_AT || ( ${${ZINIT[BIN_DIR]}}/zmodules/COMPILED_AT -ot ${${ZINIT[BIN_DIR]}}/zmodules/RECOMPILE_REQUEST ) ]] {
-        # Don't trust access times and verify hard stored values.
-        [[ -e ${${ZINIT[BIN_DIR]}}/module/COMPILED_AT ]] && local compiled_at_ts="$(<${${ZINIT[BIN_DIR]}}/module/COMPILED_AT)"
-        [[ -e ${${ZINIT[BIN_DIR]}}/module/RECOMPILE_REQUEST ]] && local recompile_request_ts="$(<${${ZINIT[BIN_DIR]}}/module/RECOMPILE_REQUEST)"
-
-        if [[ ${recompile_request_ts:-1} -gt ${compiled_at_ts:-0} ]] {
-            +zi-log "{u-warn}WARNING{b-warn}:{rst}{msg} A {lhi}recompilation{rst}" \
-                "of the Zinit module has been requested… {hi}Building{rst}…"
-            (( ${+functions[.zinit-confirm]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-autoload.zsh" || return 1
-            command make -C "${ZINIT[BIN_DIR]}/zmodules" distclean &>/dev/null
-            .zinit-module build &>/dev/null
-            if command make -C "${ZINIT[BIN_DIR]}/zmodules" &>/dev/null; then
-                +zi-log "{ok}Build successful!{rst}"
-            else
-                builtin print -r -- "${ZINIT[col-error]}Compilation failed.${ZINIT[col-rst]}" \
-                     "${ZINIT[col-pre]}You can enter the following command:${ZINIT[col-rst]}" \
-                     'make -C "${ZINIT[BIN_DIR]}/zmodules' \
-                     "${ZINIT[col-pre]}to see the error messages and e.g.: report an issue" \
-                     "at GitHub${ZINIT[col-rst]}"
-            fi
-
-            command date '+%s' >! "${ZINIT[BIN_DIR]}/zmodules/COMPILED_AT"
-        }
-    }
-} # ]]]
+# module recompilation for the project rename
+# if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
+#     if [[ ! -f ${${ZINIT[BIN_DIR]}}/zmodules/COMPILED_AT || ( ${${ZINIT[BIN_DIR]}}/zmodules/COMPILED_AT -ot ${${ZINIT[BIN_DIR]}}/zmodules/RECOMPILE_REQUEST ) ]] {
+#         # Don't trust access times and verify hard stored values.
+#         [[ -e ${${ZINIT[BIN_DIR]}}/module/COMPILED_AT ]] && local compiled_at_ts="$(<${${ZINIT[BIN_DIR]}}/module/COMPILED_AT)"
+#         [[ -e ${${ZINIT[BIN_DIR]}}/module/RECOMPILE_REQUEST ]] && local recompile_request_ts="$(<${${ZINIT[BIN_DIR]}}/module/RECOMPILE_REQUEST)"
+#
+#         if [[ ${recompile_request_ts:-1} -gt ${compiled_at_ts:-0} ]] {
+#             +zi-log "{u-warn}WARNING{b-warn}:{rst}{msg} A {lhi}recompilation{rst}" \
+#                 "of the Zinit module has been requested… {hi}Building{rst}…"
+#             (( ${+functions[.zinit-confirm]} )) || builtin source "${ZINIT[BIN_DIR]}/zinit-autoload.zsh" || return 1
+#             command make -C "${ZINIT[BIN_DIR]}/zmodules" distclean &>/dev/null
+#             .zinit-module build &>/dev/null
+#             if command make -C "${ZINIT[BIN_DIR]}/zmodules" &>/dev/null; then
+#                 +zi-log "{ok}Build successful!{rst}"
+#             else
+#                 builtin print -r -- "${ZINIT[col-error]}Compilation failed.${ZINIT[col-rst]}" \
+#                      "${ZINIT[col-pre]}You can enter the following command:${ZINIT[col-rst]}" \
+#                      'make -C "${ZINIT[BIN_DIR]}/zmodules' \
+#                      "${ZINIT[col-pre]}to see the error messages and e.g.: report an issue" \
+#                      "at GitHub${ZINIT[col-rst]}"
+#             fi
+#
+#             command date '+%s' >! "${ZINIT[BIN_DIR]}/zmodules/COMPILED_AT"
+#         }
+#     }
+# } 
 
 # !atpull-pre
 @zinit-register-hook "-r/--reset" hook:e-\!atpull-pre ∞zinit-reset-hook
@@ -3311,18 +3308,12 @@ if [[ -e ${${ZINIT[BIN_DIR]}}/zmodules/Src/zdharma/zplugin.so ]] {
 typeset -g REPLY
 
 # a searchable menu of tags for current directory
-zinit null light-mode autoload'zi-browse-symbol' for %$ZINIT[BIN_DIR]
-zle -N zi-browse-symbol
-zle -N zi-browse-symbol-backwards zi-browse-symbol
-zle -N zi-browse-symbol-pbackwards zi-browse-symbol
-zle -N zi-browse-symbol-pforwards zi-browse-symbol
-zstyle -s ':zinit:browse-symbol' key ZINIT_TMP || ZINIT_TMP='\eQ'
-[[ -n $ZINIT_TMP ]] && bindkey $ZINIT_TMP zi-browse-symbol
+# zinit null light-mode autoload'zi-browse-symbol' for %$ZINIT[BIN_DIR]
+# zle -N zi-browse-symbol
+# zle -N zi-browse-symbol-backwards zi-browse-symbol
+# zle -N zi-browse-symbol-pbackwards zi-browse-symbol
+# zle -N zi-browse-symbol-pforwards zi-browse-symbol
+# zstyle -s ':zinit:browse-symbol' key ZINIT_TMP || ZINIT_TMP='\eQ'
+# [[ -n $ZINIT_TMP ]] && bindkey $ZINIT_TMP zi-browse-symbol
 
-# Local Variables:
-# mode: Shell-Script
-# sh-indentation: 2
-# indent-tabs-mode: nil
-# sh-basic-offset: 2
-# End:
 # vim: ft=zsh sw=2 ts=2 et foldmarker=[[[,]]] foldmethod=marker
